@@ -1,0 +1,257 @@
+#include <iostream>
+#include <cstdlib>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+struct book {
+    string name;
+    int release;
+    string author;
+    vector <int> score;
+    int avgScore;
+};
+
+int avg(vector <int> score) {
+    int avg = 0;
+    for (int j = 0; j < score.size(); j++) {
+        avg += score[j];
+    }
+    avg /= 5;
+    return avg;
+}
+
+void inf(vector <book> library) {
+
+    for (int i = 0; i < library.size(); i++) {
+        cout << library[i].name << endl << library[i].release << endl << library[i].author << endl << library[i].avgScore << endl << endl;
+    }
+}
+
+string find(vector <book> library) {
+    string f;
+    cout << "введите имя автора" << endl;
+    cin.ignore();
+    getline(cin, f);
+    string search = "null";
+    for (int i = 0; i < 5; i++) {
+        if (library[i].author.find(f) != -1) {
+            search = library[i].name;
+        }
+
+    }
+    if (search == "null") search = "нет такого автора";
+    return search;
+}
+
+book createVector();
+
+void del_vector(vector <book>& library, int pos)
+{
+    library.erase(library.begin() + pos);
+}
+
+bool compByName(book b1, book b2) {
+    return b1.name < b2.name;
+}
+
+bool compByName2(book b1, book b2) {
+    return b1.name > b2.name;
+}
+
+
+bool compByRelease(book r1, book r2) {
+    return r1.release < r2.release;
+}
+
+bool compByAName(book b1, book b2) {
+    return b1.author < b2.author;
+}
+
+bool compByAvg(book r1, book r2) {
+    return r1.avgScore < r2.avgScore;
+}
+
+bool compByAvg2(book r1, book r2) {
+    return r1.avgScore > r2.avgScore;
+}
+
+int main() {
+    setlocale(LC_ALL, "Rus");
+    vector <book> library = {
+        {"the world", 1992, "palkin", {2,3,5,4,3}},
+        {"sky", 1345, "gogol", {6,8,4,3,6}},
+        {"cook", 1898, "mahov", {3,5,7,2,2}},
+        {"undeground", 1666, "lolov", {1,3,4,2,1}},
+        {"luck", 2022, "komot", {2,6,7,4,5}},
+    };
+
+    for (int i = 0; i < 5; i++) {
+        library[i].avgScore = avg(library[i].score);
+    }
+ 
+
+    int a;
+    cout << "Введите номер задания:" << "\n" << "1. вывести на экран всю информацию о книгах" << "\n"
+        << "2. поиск книги по части автора" << "\n"
+        << "3. добавления новой книги" << "\n" << "4.удалить книгу \n" << "5.сортировать по названию" << endl
+        << "6.сортировать по названию в обратном порядке" << endl << "7.сортировать по году выпуска"
+        << endl << "8.сортировать по автору"
+        << endl
+        << "9.сортировать по средней оценке" << endl << "10.сортировать по средней оценке в обратном порядке" << endl << "11.выход" << endl;
+    cin >> a;
+    while (cin.fail() || a > 11 || a < 1)
+    {
+        cout << "Ошибка ввода!Повторите!\n";
+        cin.clear();
+        cin.ignore(32767, '\n');
+        cin >> a;
+        cout << endl;
+    }
+    bool k = 0;
+    while (k != 1) {
+
+
+        switch (a) {
+        case 1:
+        {
+            inf(library);
+            break;
+        }
+        case 2: {
+            cout << find(library)<< endl;
+
+            break;
+        }
+
+        case 3: {
+            library.push_back(createVector());
+            cout << "ваша книга добавлена" << endl;
+            break;
+        }
+        case 4: {
+            cout << "Введите позицию книги которую хотите удалить " << endl;
+            int p;
+            cin >> p;
+            del_vector(library, p);
+            cout << "ваша книга удалена" << endl;
+            break;
+        }
+        case 5: {
+            sort(library.begin(), library.end(), compByName);
+            for (auto iter = library.begin(); iter != library.end(); ++iter) {
+                cout << iter->name << "\n";
+            }
+            break;
+        }
+        case 6: {
+            sort(library.begin(), library.end(), compByName2);
+            for (auto iter = library.begin(); iter != library.end(); ++iter) {
+                cout << iter->name << "\n";
+            }
+            break;
+        }
+        case 7: {
+            sort(library.begin(), library.end(), compByRelease);
+            for (auto iter = library.begin(); iter != library.end(); ++iter) {
+                cout << iter->release << "\n";
+            }
+            break;
+        }
+        case 8: {
+            sort(library.begin(), library.end(), compByAName);
+            for (auto iter = library.begin(); iter != library.end(); ++iter) {
+                cout << iter->author << "\n";
+            }
+            break;
+        }
+        case 9: {
+            sort(library.begin(), library.end(), compByAvg);
+            for (auto iter = library.begin(); iter != library.end(); ++iter) {
+                cout << iter->avgScore << "\n";
+            }
+
+            break;
+        }
+        case 10: {
+            sort(library.begin(), library.end(), compByAvg2);
+            for (auto iter = library.begin(); iter != library.end(); ++iter) {
+                cout << iter->avgScore << "\n";
+            }
+            break;
+        }
+        case 11: {
+
+        default:   k = 1;
+
+
+        }
+
+        }
+        if (k == 1) {
+            break;
+        }
+        else {
+            cout << "Введите номер задания:" << "\n" << "1. вывести на экран всю информацию о книгах" << "\n"
+                << "2. поиск книги по части автора" << "\n"
+                << "3. добавления новой книги" << "\n" << "4.удалить книгу \n" << "5.сортировать по названию" << endl
+                << "6.сортировать по названию в обратном порядке" << endl << "7.сортировать по году выпуска"
+                << endl << "8.сортировать по автору"
+                << endl
+                << "9.сортировать по средней оценке" << endl << "10.сортировать по средней оценке в обратном порядке" << endl << "11.выход" << endl;
+            cin >> a;
+            while (cin.fail() || a > 11 || a < 1)
+            {
+                cout << "Ошибка ввода!Повторите!\n";
+                cin.clear();
+                cin.ignore(32767, '\n');
+                cin >> a;
+                cout << endl;
+            }
+        }
+
+
+    }
+
+    return 0;
+}
+
+book createVector() {
+
+    book newBook;
+
+    cout << "введите название книги" << endl;
+    string n;
+    cin.ignore();
+    getline(cin, n);
+    newBook.name = n;
+
+    cout << endl << "введите год книги" << endl;
+    int r;
+    cin >> r;
+    newBook.release = r;
+
+    cout << endl << "введите имя автора" << endl;
+    string a;
+    cin.ignore();
+    getline(cin, a);
+    newBook.author = a;
+
+    cout << endl << "введите массив оценок" << endl;
+    vector<int> s;
+    s.resize(5);
+    for (int i = 0; i < 5; i++) {
+        cin >> s[i];
+        cout << endl;
+    }
+    newBook.score = s;
+
+    int av = avg(s);
+    newBook.avgScore = av;
+
+    return newBook;
+}
+
+
+
